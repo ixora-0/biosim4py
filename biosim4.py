@@ -67,8 +67,12 @@ class Creature:
         # creating the neuron  (rRNA)
         self.neurons = {"sensory": {}, "internal": {}, "action": {}}  # the "brain"
         for action in action_neurons:
-            # Create each action neurons first, then the neurons that are connected to each action neuron, then the neurons that are connected to those, etc.
-            # This ensures that all neurons that are in anyway connected to action neurons are created, and ignores those which aren't connected to action neurons
+            # Create each action neurons first, then the neurons
+            # that are connected to each action neuron, then the neurons
+            # that are connected to those, etc.
+            # This ensures that all neurons that are in anyway
+            # connected to action neurons are created, and ignores those which aren't
+
             self.neurons["action"][action] = ActionNeuron(self, action)
             children = [self.neurons["action"][action]]
 
@@ -109,10 +113,8 @@ class Creature:
 
     def execute_actions(self):
         # from action neurons' outputs, do the corresponding action
-        dx, dy = (
-            0,
-            0,
-        )  # probability to move in x, y direction, if negative than the move is in the negative direction
+        dx, dy = 0, 0
+        # probability to move in x, y direction, if negative than the move is in the negative direction
         for n in self.neurons["action"]:
             output = self.neurons["action"][n].output  # this is the raw sum, not scaled
             match n:
@@ -473,7 +475,9 @@ def apply_survival_criteria():
 
 
 def repopulate():
-    """From the current population, select 2 random parents, create a new genome from the parents' using 1 point crossover, repeat until a new the generation is filled"""
+    """From the current population, select 2 random parents,
+    create a new genome from the parents' using 1 point crossover,
+    repeat until a new the generation is filled"""
     population = get_population()
     next_gen = []
     for _ in range(POPULATION):
