@@ -92,9 +92,9 @@ class Creature:
                                 # create the neuron
                                 if c["from_type"] == "internal":
                                     new_neuron = InternalNeuron(self, c["from"])
-                                    new_children.append(
-                                        new_neuron
-                                    )  # internal neurons can be a child of other neurons, sensory neurons can't
+                                    # internal neurons can be a child of other neurons,
+                                    # sensory neurons can't
+                                    new_children.append(new_neuron)
                                 else:
                                     new_neuron = SensoryNeuron(self, c["from"])
                                 self.neurons[c["from_type"]][c["from"]] = new_neuron
@@ -112,9 +112,12 @@ class Creature:
                 self.neurons[t][n].feed_inputs()
 
     def execute_actions(self):
-        # from action neurons' outputs, do the corresponding action
+        # From action neurons' outputs, do the corresponding action
+
+        # probability to move in x, y direction,
+        # if negative than the move is in the negative direction
         dx, dy = 0, 0
-        # probability to move in x, y direction, if negative than the move is in the negative direction
+
         for n in self.neurons["action"]:
             output = self.neurons["action"][n].output  # this is the raw sum, not scaled
             match n:
@@ -130,7 +133,7 @@ class Creature:
                     dy += self.facing_x
                 case "MOVE_RANDOM":
                     if output > 0:
-                        # only move randomly if theaction neuron is activated
+                        # only move randomly if the action neuron is activated
                         dx += random.random() * 2 - 1
                         dy += random.random() * 2 - 1
                 case "SET_OSCILLATOR_PERIOD":
@@ -211,7 +214,8 @@ class SensoryNeuron(Neuron):
                     / int(max(WORLD_WIDTH / 2 - 1, WORLD_HEIGHT / 2 - 1))
                 )
             case "GENETIC_SIM_FWD":
-                # How genetically similar the creature directly forward is (return 0 if noo one's there)
+                # How genetically similar the creature directly forward is
+                # (return 0 if noo one's there)
                 tx, ty = (
                     self.creature.x + self.creature.facing_x,
                     self.creature.y + self.creature.facing_y,
@@ -425,7 +429,8 @@ def initialize_world():
 
 
 def populate_world(population: list[Creature] = []):
-    """Populate the world with population, if empty then populate with creatures that has random genome"""
+    """Populate the world with population, if empty then populate with creatures that
+    has random genome"""
     global world
     if len(population) == 0:
         for _ in range(POPULATION):
